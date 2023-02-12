@@ -1,6 +1,6 @@
 ## Description
 
-To check description and project solutions go to [SOLUTIION.md](SOLUTIION.md) file.
+To check description and project solutions go to SOLUTIION.md file.
 
 # Project Installation 
 
