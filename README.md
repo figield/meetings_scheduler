@@ -1,11 +1,10 @@
 ## Description
 
-To check description and project solutions go to SOLUTIION.md file.
+Based on employee meetings during working hours, the application searches for free dates and times as suggestions for new meetings of a certain duration.
 
-# Project Installation 
+## Installation
 
-
-## Virtual environament and libraries
+### Virtual environament and libraries
 
 Install Python and the tool for installing Python packages - pip:
 ```commandline
@@ -39,7 +38,7 @@ Install libraries into the virtual environment
 pip install -r requirements.txt
 ```
 
-## The quickest START
+### The quickest START
 
 Project already has initialized `sqlite3` database with loaded data. 
 Just run tests to check if code is working.
@@ -62,7 +61,7 @@ curl --header "Content-Type: application/json" \
   http://127.0.0.1:8000/api/free/
 ```
 
-## Quick START
+### Quick START
 
 Copy paste commands:
 ```commandline
@@ -72,13 +71,13 @@ python3 manage.py loaddata
 pytest
 ```
 
-## Step by step
+### Step by step
 
-## Database configuration.
+#### Database configuration.
 
 Project is starting automatically with sqlite3. It is possible to run it with PostgreSQL or any other compatible with Django database.
 
-### Connecting to PostgreSQL
+#### Connecting to PostgreSQL
 
 Create database ex. `lime`. With your custom credentials.
 
@@ -88,7 +87,7 @@ Once created you can remove it and create if you need:
 dropdb lime 
 createdb lime
 ```
-In the Django settings.py there is the following example how to setup connection to POstgreSQL database:
+In the Django settings.py there is the following example how to setup connection to PostgreSQL database:
 
 ```python
 DATABASES = {
@@ -102,7 +101,7 @@ DATABASES = {
 }
 ```
 
-### Connecting to SQLite3
+#### Connecting to SQLite3
 
 SQLite3 database is default database, already configured in settings.py.
 Project also includes initialized database in `lime` file.
@@ -116,9 +115,9 @@ DATABASES = {
 }
 ```
 
-## Run project
+### Run project
 
-If database is empty, the first step is running django migrations to create tables:
+If the database is empty, the first step is to run a Django migration to create the tables:
 
 ```commandline
 python3 manage.py migrate
@@ -147,8 +146,11 @@ Command output to terminal (for reference only):
 10077:Marquerite Romero: 2015-02-10 14:30:00 - 2015-02-10 15:00:00
 10078:Lorraine Phillips: 2015-03-02 08:00:00 - 2015-03-02 08:30:00
 Data loaded in 0:01:44.330360
-143 lines with employee data
-10078 lines with meetings data
+Traversed 143 lines with employee data
+Traversed 10078 lines with meetings data
+Database contains 140 employess
+Database contains 10076 meetings
+
 ```
  
 Loading data to PostgreSQL database is twice faster:
@@ -158,8 +160,11 @@ Loading data to PostgreSQL database is twice faster:
 10077:Marquerite Romero: 2015-02-10 14:30:00 - 2015-02-10 15:00:00
 10078:Lorraine Phillips: 2015-03-02 08:00:00 - 2015-03-02 08:30:00
 Data loaded in 0:00:56.803654
-143 lines with employee data
-10078 lines with meetings data
+Traversed 143 lines with employee data
+Traversed 10078 lines with meetings data
+Database contains 140 employess
+Database contains 10076 meetings
+
 ```
 
 If there is no tables created in database, the following error will be shown:
@@ -200,17 +205,17 @@ Optional step (if you want to play with Django admin):
 python3 manage.py createsuperuser
 ```
 
-## Run Django development server 
+### Run Django development server
 
 
 ```commandline
 python3 manage.py runserver
 ```
 
-### Manual testing
+#### Manual testing
 
 Example of the request data. 
-Can be copied for the POST methed on  page (Django feature): `http://127.0.0.1:8000/api/free/`:
+Can be copied for the POST methed on page (Django feature): `http://127.0.0.1:8000/api/free/`:
 
 ```
 {
@@ -234,13 +239,13 @@ Data taken into analysis (taken from the file):
 48639959687376052586683994275030460621;2/15/2015 12:30:00 PM;2/15/2015 3:00:00 PM;
 ```
 
-### Using GET method with `curl` command:
+#### Using GET method with `curl` command:
 
 ```
 curl 'http://127.0.0.1:8000/api/free/?employee_ids=276908764613820584354290536660008166629,48639959687376052586683994275030460621&duration=90&earliest_start=2/14/2015+8:00:00+AM&latest_start=2/15/2015+4:00:00+PM&office_hours=8-17' -H "Accept: application/json"
 ```
 
-### Using POST method:
+#### Using POST method:
 
 ```
 curl --header "Content-Type: application/json" \

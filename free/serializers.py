@@ -49,7 +49,6 @@ class RequestFreeTimeSerializer:
             self.earliest_start = parser.get_datetime(self.data.get('earliest_start'))
             self.latest_start = parser.get_datetime(self.data.get('latest_start'))
             self.start_office_hour, self.end_office_hour = parser.get_start_end_hours(self.data.get('office_hours'))
-            # how to split by, & ;? queryParams get is returning 1 item
             self.external_ids = self.data.get('employee_ids').split(",")
         except:
             return False
@@ -98,10 +97,10 @@ class RequestFreeTimeSerializer:
             8   earliest latest  17
          Xxx|Xx--Xx|x--Xx-X|x-Xx-|--Xx (overtime)
 
-         In the example above, three meeting should be taken into a consideration
-         between earliest_start and latest_start time frames.
-         Meetings can be spread over several days.
-         Meetings are orederd by start time.
+        In the example above, three meeting should be taken into a consideration
+        between earliest_start and latest_start time frames.
+        Meetings can be spread over several days.
+        Meetings are orederd by start time.
         """
 
         return Meeting.objects.filter(employee__external_id__in=self.external_ids,
@@ -110,9 +109,8 @@ class RequestFreeTimeSerializer:
 
     def _possible_start_times(self):
         """
-        Get possible start times.
-        ...
-
+        Get possible start times between earliest and latest start time and duration.
+        Also considering the working hours.
         """
         meeting_slots_set = set()
         duration = timedelta(minutes=self.meeting_length)
@@ -124,7 +122,7 @@ class RequestFreeTimeSerializer:
                     and meeting_slot_end <= datetime(meeting_slot_start.year,
                                                      meeting_slot_start.month,
                                                      meeting_slot_start.day,
-                                                     self.end_office_hour, 0):  # office_end_minutes?
+                                                     self.end_office_hour, 0):  # office_end_minutes (was not required)
                 meeting_slots_set.add(meeting_slot_start)
             meeting_slot_start = meeting_slot_start + meeting_step_unit
             meeting_slot_end = meeting_slot_start + duration

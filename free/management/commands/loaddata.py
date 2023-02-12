@@ -4,9 +4,8 @@ from datetime import datetime, timedelta
 
 from django.core.management.base import BaseCommand
 from django.db import OperationalError
-
-from freebusy.settings import DATETIME_FORMAT
 from free.models import Employee, Meeting
+from freebusy.settings import DATETIME_FORMAT
 
 
 class Command(BaseCommand):
@@ -17,6 +16,7 @@ class Command(BaseCommand):
         self.items_counter = 0
         self.file_lines_counter = 0
         self.file_name = "freebusy.txt"
+        self.errors = []
         super().__init__()
 
     def add_arguments(self, parser):
@@ -24,9 +24,15 @@ class Command(BaseCommand):
         parser.add_argument('--verbose', type=str, default='Yes', help="Show traversed data [Yes]")
 
     def print_io(self, line, force_print=False):
+        if "ERROR" in line:
+            self.errors.append(line)
         if self.verbose or force_print:
             self.stdout.write(line)
             self.stdout.flush()
+
+    def print_errors(self):
+        for e in self.errors:
+            self.stdout.write(e)
 
     def stream_lines_from_file(func):
 
@@ -61,7 +67,7 @@ class Command(BaseCommand):
                 external_id = data[0]
                 name = data[1]
                 if name is None or len(name) < 1:
-                    self.print_io(self.style.ERROR(f'{self.file_lines_counter}:employee VALIDATION:') + line)
+                    self.print_io(self.style.ERROR(f'{self.file_lines_counter}:ERROR:employee VALIDATION:') + line)
                 else:
                     employee_exists = Employee.objects.filter(external_id=external_id).exists()
                     if employee_exists:
@@ -72,7 +78,7 @@ class Command(BaseCommand):
                         employee = Employee.objects.create(name=name, external_id=external_id)
                         self.print_io(self.style.WARNING(f'{self.items_counter}: ') + f"{employee}")
             elif len(data) == 1:
-                self.print_io(self.style.ERROR(f'{self.file_lines_counter}:TRASH:') + line)
+                self.print_io(self.style.ERROR(f'{self.file_lines_counter}:ERROR:TRASH:') + line)
         except OperationalError as e:
             self.print_io(self.style.WARNING(f"[handle_employee_data] ") + self.style.ERROR(e), force_print=True)
             exit(1)
@@ -88,19 +94,23 @@ class Command(BaseCommand):
                 self.items_counter += 1
                 external_id = data[0]
                 start = datetime.strptime(data[1], DATETIME_FORMAT)
-                end = datetime.strptime(data[2], DATETIME_FORMAT)  # check id end > start
-                employees = Employee.objects.filter(external_id=external_id)
-                if employees.exists():
-                    employee = employees.first()
-                    meeting, created = Meeting.objects.get_or_create(employee=employee, start=start, end=end)
-                    if not created:
-                        self.print_io(self.style.WARNING(f'{self.items_counter}:ALREADY LOADED:') + f"{meeting}")
-                    else:
-                        self.print_io(self.style.SUCCESS(f'{self.items_counter}:') + f"{meeting}")
+                end = datetime.strptime(data[2], DATETIME_FORMAT)
+                if start >= end:
+                    self.print_io(self.style.ERROR(f'{self.file_lines_counter}:ERROR:START >= END:') + line)
                 else:
-                    self.print_io(self.style.ERROR(f'{self.file_lines_counter}:EMPLOYEE DOES NOT EXISTS:') + line)
+                    employees = Employee.objects.filter(external_id=external_id)
+                    if employees.exists():
+                        employee = employees.first()
+                        meeting, created = Meeting.objects.get_or_create(employee=employee, start=start, end=end)
+                        if not created:
+                            self.print_io(self.style.WARNING(f'{self.items_counter}:ALREADY LOADED:') + f"{meeting}")
+                        else:
+                            self.print_io(self.style.SUCCESS(f'{self.items_counter}:') + f"{meeting}")
+                    else:
+                        self.print_io(
+                            self.style.ERROR(f'{self.file_lines_counter}:ERROR:EMPLOYEE DOES NOT EXISTS:') + line)
             elif data_len == 3 or data_len > 4:
-                self.print_io(self.style.ERROR(f'{self.file_lines_counter}:TRASH:') + line)
+                self.print_io(self.style.ERROR(f'{self.file_lines_counter}:ERROR:TRASH:') + line)
         except OperationalError as e:
             self.print_io(self.style.WARNING(f"[handle_meeting_data] ") + self.style.ERROR(e), force_print=True)
             exit(1)
@@ -116,13 +126,18 @@ class Command(BaseCommand):
                 self.verbose = options['verbose'].lower() in ['yes', 'y', '1', 'true', 't', 'yep']
 
             start_time = time.time()
-            employees_amount = self.handle_employee_data()
-            meetings_amount = self.handle_meeting_data()
+            employees_lines = self.handle_employee_data()
+            meetings_lines = self.handle_meeting_data()
             elapsed = time.time() - start_time
 
             self.print_io(self.style.SUCCESS(f"Data loaded in {timedelta(seconds=elapsed)}"), force_print=True)
-            self.print_io(self.style.SUCCESS(f"{employees_amount} lines with employee data"), force_print=True)
-            self.print_io(self.style.SUCCESS(f"{meetings_amount} lines with meetings data"), force_print=True)
+            self.print_io(self.style.SUCCESS(f"Traversed {employees_lines} lines with employee data"), force_print=True)
+            self.print_io(self.style.SUCCESS(f"Traversed {meetings_lines} lines with meetings data"), force_print=True)
+            self.print_io(self.style.SUCCESS(f"Database contains {Employee.objects.all().count()} employess"),
+                          force_print=True)
+            self.print_io(self.style.SUCCESS(f"Database contains {Meeting.objects.all().count()} meetings"),
+                          force_print=True)
+            # self.print_errors()
         except Exception as e:
             self.print_io("[handle] " + self.style.ERROR(e), force_print=True)
             exit(1)
