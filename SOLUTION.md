@@ -72,4 +72,4 @@ It is not important to know if the employees meeting is common.
 - Performance and command tests would be good to have.
 - Better project description.
 - Handle office time with minutes precision, ex. 7:30 - 17:30.
-- I also played with class method deorators, the solution is a bit over-engineered, but... I couldn't resist.
+- I also played with class method decorators, the solution is a bit over-engineered, but... I couldn't resist.
