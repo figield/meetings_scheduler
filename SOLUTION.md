@@ -43,7 +43,7 @@
 2. How the `python3 manage.py loaddata` command is working?
 
 The file is read line by line. It can be very large, so this method allows you to minimize memory consumption.
-The file goes through twice. Collect employee data first. If you meet the same person, the update is not performed (this is a matter of choice).
+The algorithm analyzes the file twice. First, it collects employee data. If it meets the same person, the update will not be performed (this is a matter of choice).
 The second round is to collect data on employee meetings.
 To store meeting data in the database, the following requirements must be met:
 
