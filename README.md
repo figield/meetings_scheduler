@@ -282,3 +282,5 @@ Vary: Accept
 ```
 
 Have fun!
+
+![Django REST tool](django_rest_tool.png)
