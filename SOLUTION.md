@@ -40,7 +40,7 @@
 
 ```
 
-2. How the `python3 manage.py loaddata` command is working?
+3. How the `python3 manage.py loaddata` command is working?
 
 The file is read line by line. It can be very large, so this method allows you to minimize memory consumption.
 The algorithm analyzes the file twice. First, it collects employee data. If it meets the same person, the update will not be performed (this is a matter of choice).
@@ -62,10 +62,14 @@ To store meeting data in the database, the following requirements must be met:
 7062:ERROR:START >= END:132170847144391420901310654714918986833;1/1/2015 2:00:00 PM;1/1/2015 9:00:00 AM;2E77E3ACE...
 ```
 
-3. Choosen one-to-many relation instead many-to-many
+4. Choosen one-to-many relation instead many-to-many
 
 Mainly due to the efficiency of the `loaddata` command. Also the current approach makes coding simple.
 It is not important to know if the employees meeting is common.
+
+5. GET or POST?
+
+I chose to handle requests for both GET and POST HTTP methods to give the API more flexibility.
 
 ### What else could be added or improved?
 
