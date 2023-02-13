@@ -3,9 +3,9 @@
 
 1. Why Django?
 
-- It's easy to write commands like `loaddata` or `fetchdata`, so it's easy to access Django ORM ie database data.
+- It's easy to write commands like `loaddata` or `fetchdata` with Django ORM and tools.
 - Because I'm working in a Django project and I can start right away.
-- There is a good project structure inherited from django.
+- There is a good project structure inherited from Django.
 - The Django ORM works pretty well.
 
 2. Project structure
