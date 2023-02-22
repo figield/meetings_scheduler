@@ -79,16 +79,16 @@ DATABASES2 = {
     'default': {
         'HOST': '127.0.0.1',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lime',
-        'USER': 'lime',
-        'PASSWORD': 'lime',
+        'NAME': 'example',
+        'USER': 'example',
+        'PASSWORD': 'example',
     }
 }
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'lime',
+        'NAME': 'sqlite3.db',
     }
 }
 

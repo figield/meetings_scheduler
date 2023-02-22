@@ -65,7 +65,7 @@ curl --header "Content-Type: application/json" \
 
 Copy paste commands:
 ```commandline
-rm lime
+rm sqlite3.db
 python3 manage.py migrate
 python3 manage.py loaddata
 pytest
@@ -79,13 +79,13 @@ Project is starting automatically with sqlite3. It is possible to run it with Po
 
 #### Connecting to PostgreSQL
 
-Create database ex. `lime`. With your custom credentials.
+Create database ex. `sqlite3.db`. With your custom credentials.
 
 Once created you can remove it and create if you need:
 
 ```commandline
-dropdb lime 
-createdb lime
+dropdb sqlite3.db
+createdb sqlite3.db
 ```
 In the Django settings.py there is the following example how to setup connection to PostgreSQL database:
 
@@ -94,9 +94,9 @@ DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lime',
-        'USER': 'lime',
-        'PASSWORD': 'lime',
+        'NAME': 'sqlite3.db',
+        'USER': 'sqlite3.db',
+        'PASSWORD': 'sqlite3.db',
     }
 }
 ```
@@ -104,13 +104,13 @@ DATABASES = {
 #### Connecting to SQLite3
 
 SQLite3 database is default database, already configured in settings.py.
-Project also includes initialized database in `lime` file.
+Project also includes initialized database in `sqlite3.db` file.
 
 ```python
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'lime',
+        'NAME': 'sqlite3.db',
     }
 }
 ```
@@ -187,7 +187,7 @@ Desired output from running tests:
 ============================== test session starts ===============================
 platform linux -- Python 3.8.10, pytest-5.4.2, py-1.11.0, pluggy-0.13.1
 django: settings: freebusy.settings (from ini)
-rootdir: /home/dawidfigiel/projects/lime, inifile: pytest.ini
+rootdir: /home/projects/sqlite3.db, inifile: pytest.ini
 plugins: Faker-4.1.0, django-3.9.0
 collected 26 items                                                               
 
