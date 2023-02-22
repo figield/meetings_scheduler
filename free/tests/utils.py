@@ -1,7 +1,5 @@
 import datetime
-from random import choice
 
-from free.models import Employee
 from free.utils.parser import get_datetime_text
 
 API_URL = "/api/free/"
@@ -28,11 +26,3 @@ def request_free_time_data(employees, earliest, latest, duration=60, office_hour
         'latest_start': get_datetime_text(latest),
         'office_hours': office_hours
     }
-
-
-def random_employee():
-    """
-    Return a random Employee object from db.
-    """
-    employees = Employee.objects.all()
-    return choice(employees)

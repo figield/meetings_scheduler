@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class MovielistConfig(AppConfig):
+class RestAppConfig(AppConfig):
     name = 'free'
