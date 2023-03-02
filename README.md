@@ -94,9 +94,9 @@ DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sqlite3.db',
-        'USER': 'sqlite3.db',
-        'PASSWORD': 'sqlite3.db',
+        'NAME': 'example',
+        'USER': 'example',
+        'PASSWORD': 'example',
     }
 }
 ```
